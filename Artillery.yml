@@ -1,0 +1,29 @@
+config:
+  target: "http://localhost:8081"
+  # Following phases test a scenario where 0 tps ramps up to 50 tps in 1 minutes, and then ramps up to 1000 tps every 30 seconds in 50 tps increment
+
+  timeout: 1
+  phases:
+    - duration: 30
+      arrivalRate: 500
+      #rampTo: 5000
+  defaults:
+    headers:
+      x-api-key: "fake-x-api-key"
+      Content-Type: "application/json"
+  plugins:
+    cloudwatch:
+      namespace: "my-service-name"
+    influxdb:
+      testName: "my-service Load Test Results"
+      influx:
+        host: "fake-ip-address"
+        username: "fake-username"
+        password: "fake-password"
+        database: "influx"
+
+scenarios:
+  - name: Get my response
+    flow:
+      - get:
+          url: "/topselling/category/1"
